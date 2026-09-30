@@ -1,0 +1,50 @@
+<organisation xmlns="http://cpee.org/ns/organisation/1.0">
+  <units>
+    <unit id="Apartment">
+      <permissions/>
+    </unit>
+  </units>
+
+  <roles>
+    <role id="Household Member">
+      <permissions/>
+    </role>
+
+    <role id="amy">
+      <permissions/>
+    </role>
+
+    <role id="bob">
+      <permissions/>
+    </role>
+
+    <role id="charlie">
+      <permissions/>
+    </role>
+
+    <role id="System">
+      <permissions/>
+    </role>
+  </roles>
+
+  <subjects>
+    <subject id="amy" uid="amy">
+      <relation unit="Apartment" role="Household Member"/>
+      <relation unit="Apartment" role="amy"/>
+    </subject>
+
+    <subject id="bob" uid="bob">
+      <relation unit="Apartment" role="Household Member"/>
+      <relation unit="Apartment" role="bob"/>
+    </subject>
+
+    <subject id="charlie" uid="charlie">
+      <relation unit="Apartment" role="Household Member"/>
+      <relation unit="Apartment" role="charlie"/>
+    </subject>
+
+    <subject id="system" uid="system">
+      <relation unit="Apartment" role="System"/>
+    </subject>
+  </subjects>
+</organisation>

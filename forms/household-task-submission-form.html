@@ -1,0 +1,50 @@
+<table>
+  <tr>
+    <td>
+      <label for="area">Area</label>
+    </td>
+    <td>
+      <select form="worklist-form" name="area" id="area" required>
+        <option value="kitchen">Kitchen</option>
+        <option value="bathroom">Bathroom</option>
+        <option value="shared_area">Shared area</option>
+        <option value="other">Other</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for="task">Task</label>
+    </td>
+    <td>
+      <input form="worklist-form" type="text" name="task" id="task" placeholder="e.g. clean oven, remove mold" required>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for="urgency">Urgency</label>
+    </td>
+    <td>
+      <select form="worklist-form" name="urgency" id="urgency">
+        <option value="normal">Normal</option>
+        <option value="urgent">Urgent</option>
+        <option value="next_week">Next week is fine</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <label for="comment">Comment</label>
+    </td>
+    <td>
+      <textarea form="worklist-form" name="comment" id="comment" placeholder="Optional details"></textarea>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <input form="worklist-form" type="submit" value="Submit cleaning request">
+    </td>
+  </tr>
+</table>
+

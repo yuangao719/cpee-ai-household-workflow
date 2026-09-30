@@ -1,0 +1,90 @@
+<worklist-form-load>                                                                                                                                                                          
+  $('td#label').text(data.data.task_label);
+</worklist-form-load>
+
+<div style="border: 1px solid #999; padding: 12px; margin-bottom: 15px;">
+  <strong>Complete your AI-assigned household task</strong>
+  <p>Describe the completed task below and enter the actual duration.</p>
+</div>
+
+<table>
+  <tr>
+    <td><label for="area">Area</label></td>
+    <td>
+      <select form="worklist-form" name="area" id="area" required>
+        <option value="kitchen">Kitchen</option>
+        <option value="bathroom">Bathroom</option>
+        <option value="shared_area">Shared area</option>
+        <option value="other">Other</option>
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td><label for="work_done">Work done</label></td>
+    <td id="label"></td>
+  </tr>
+
+  <tr>
+    <td><label for="duration_minutes">Duration minutes</label></td>
+    <td>
+      <input
+        form="worklist-form"
+        type="number"
+        name="duration_minutes"
+        id="duration_minutes"
+        min="1"
+        step="1"
+        required>
+    </td>
+  </tr>
+
+  <tr>
+    <td><label for="difficulty">Difficulty</label></td>
+    <td>
+      <select
+        form="worklist-form"
+        name="difficulty"
+        id="difficulty"
+        required>
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td><label for="completed_by">Completed by</label></td>
+    <td>
+      <input
+        form="worklist-form"
+        type="text"
+        name="completed_by"
+        id="completed_by"
+        placeholder="amy, bob, or charlie"
+        required>
+    </td>
+  </tr>
+
+  <tr>
+    <td><label for="comment">Comment</label></td>
+    <td>
+      <textarea
+        form="worklist-form"
+        name="comment"
+        id="comment"
+        placeholder="Optional notes"></textarea>
+    </td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td>
+      <input
+        form="worklist-form"
+        type="submit"
+        value="Submit cleaning result">
+    </td>
+  </tr>
+</table>
