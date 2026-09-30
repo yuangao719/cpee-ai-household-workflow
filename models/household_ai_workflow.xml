@@ -1,0 +1,513 @@
+<testset xmlns="http://cpee.org/ns/properties/2.0">
+  <executionhandler>ruby</executionhandler>
+  <dataelements>
+    <assignments>{}</assignments>
+    <assignment>["household_task_3","charlie"]</assignment>
+    <roommates>["amy","bob","charlie"]</roommates>
+    <tasks>[{"task_id":"household_task_1","label":"clean oven - kitchen","estimated_minutes":30},{"task_id":"household_task_2","label":"clean mirror - bathroom","estimated_minutes":45},{"task_id":"household_task_3","label":"Vacuum floor - shared_area","estimated_minutes":30}]</tasks>
+    <history>[]</history>
+    <household_service_token>placeholder</household_service_token>
+    <estimates>{"household_task_1":{"task_type":"clean_oven","estimated_minutes":30},"household_task_2":{"task_type":"clean_mirror","estimated_minutes":45},"household_task_3":{"task_type":"vacuum_floor","estimated_minutes":30}}</estimates>
+    <workload_summary>{"amy":30,"bob":45,"charlie":30}</workload_summary>
+    <assignment_reason>No historical data available, so supplied estimated_minutes were used. Tasks were distributed one per roommate to minimize workload difference (Amy: 30, Bob: 45, Charlie: 30).</assignment_reason>
+    <results>[{"task_id":"household_task_2","assigned_to":"bob","started_at":"2026-09-28 16:31:32 +0200","completed_at":"2026-09-28 16:34:43 +0200","result":{"user":"bob","raw":[{"name":"area","value":"kitchen"},{"name":"work_done","value":"clean mirror"},{"name":"duration_minutes","value":"30"},{"name":"difficulty","value":"normal"},{"name":"completed_by","value":"bob"},{"name":"comment","value":""}],"data":{"area":"kitchen","work_done":"clean mirror","duration_minutes":"30","difficulty":"normal","completed_by":"bob","comment":""}}}]</results>
+    <tasks_dir>https://cpee.org/hub/server/Teaching.dir/Prak.dir/TUM-Prak-26-SS.dir/GaoYuan.dir/tasks.dir/</tasks_dir>
+    <task_models>{"household_task_1":"household_task_completion.xml","household_task_2":"household_task_completion.xml","household_task_3":"household_task_completion.xml"}</task_models>
+    <last_received_result>{"CPEE-INSTANCE":"111102","CPEE-INSTANCE-URL":"https://cpee.org/flow/engine/111102","CPEE-INSTANCE-UUID":"991dd3a1-38b3-494a-b1aa-a9d2aed61b6c","CPEE-STATE":"finished","cleaning_request":{"task_id":"household_task_2","task_label":"clean mirror - bathroom","assigned_to":"bob"},"cleaning_result":{"user":"bob","raw":[{"name":"area","value":"kitchen"},{"name":"work_done","value":"clean mirror"},{"name":"duration_minutes","value":"30"},{"name":"difficulty","value":"normal"},{"name":"completed_by","value":"bob"},{"name":"comment","value":""}],"data":{"area":"kitchen","work_done":"clean mirror","duration_minutes":"30","difficulty":"normal","completed_by":"bob","comment":""}},"cleaning_context":{},"task_id":"household_task_2","assigned_to":"bob","result_message_id":"household_1790445627_534650650_kitchen_cleaning_1","started_at":"2026-09-28 16:31:32 +0200","task_result":{"task_id":"household_task_2","assigned_to":"bob","started_at":"2026-09-28 16:31:32 +0200","completed_at":"2026-09-28 16:34:43 +0200","result":{"user":"bob","raw":[{"name":"area","value":"kitchen"},{"name":"work_done","value":"clean mirror"},{"name":"duration_minutes","value":"30"},{"name":"difficulty","value":"normal"},{"name":"completed_by","value":"bob"},{"name":"comment","value":""}],"data":{"area":"kitchen","work_done":"clean mirror","duration_minutes":"30","difficulty":"normal","completed_by":"bob","comment":""}}},"task_label":"clean mirror - bathroom"}</last_received_result>
+    <current_task>{"task_id":"household_task_3","label":"Vacuum floor - shared_area","estimated_minutes":30}</current_task>
+    <task_submission_1>{"user":"amy","raw":[{"name":"area","value":"kitchen"},{"name":"task","value":"clean oven"},{"name":"urgency","value":"normal"},{"name":"comment","value":""}],"data":{"area":"kitchen","task":"clean oven","urgency":"normal","comment":""}}</task_submission_1>
+    <task_submission_2>{"user":"bob","raw":[{"name":"area","value":"bathroom"},{"name":"task","value":"clean mirror"},{"name":"urgency","value":"urgent"},{"name":"comment","value":""}],"data":{"area":"bathroom","task":"clean mirror","urgency":"urgent","comment":""}}</task_submission_2>
+    <task_submission_3>{"user":"charlie","raw":[{"name":"area","value":"shared_area"},{"name":"task","value":"Vacuum floor"},{"name":"urgency","value":"normal"},{"name":"comment","value":""}],"data":{"area":"shared_area","task":"Vacuum floor","urgency":"normal","comment":""}}</task_submission_3>
+  </dataelements>
+  <documents/>
+  <endpoints>
+    <user>https-post://cpee.org/services/timeout-user.php</user>
+    <auto>https-post://cpee.org/services/timeout-auto.php</auto>
+    <subprocess>https-post://cpee.org/flow/start/url/</subprocess>
+    <timeout>https-post://cpee.org/services/timeout.php</timeout>
+    <send>https-post://cpee.org/ing/correlators/message/send/</send>
+    <receive>https-get://cpee.org/ing/correlators/message/receive/</receive>
+    <worklist>https-post://cpee.org/worklist/server/</worklist>
+    <ai_assign>https-post://lehre.bpm.in.tum.de/ports/8081/assign</ai_assign>
+  </endpoints>
+  <attributes>
+    <info>household_ai_workflow</info>
+    <creator>Christine Ashcreek</creator>
+    <author>Christine Ashcreek</author>
+    <modeltype>CPEE</modeltype>
+    <guarded>none</guarded>
+    <guarded_id/>
+    <model_uuid>20114bd1-f9e3-40eb-8968-b5e196577b3c</model_uuid>
+    <model_version/>
+    <theme>preset</theme>
+    <design_dir>Teaching.dir/Prak.dir/TUM-Prak-26-SS.dir/GaoYuan.dir</design_dir>
+    <design_stage>development</design_stage>
+  </attributes>
+  <description>
+    <description xmlns="http://cpee.org/ns/description/1.0">
+      <manipulate id="a1" label="Initialize Input">
+        <code>data.assignments = {}
+
+data.assignment = {}
+data.results = []
+
+data.estimates = {}
+data.workload_summary = {}
+data.assignment_reason = ''
+
+data.last_received_result = {}
+data.current_task = {}
+
+data.task_submission_1 = {}
+data.task_submission_2 = {}
+data.task_submission_3 = {}
+
+data.roommates = ['amy', 'bob', 'charlie']
+data.tasks = []
+data.history = []
+
+data.task_models = {
+  'household_task_1' =&gt; 'household_task_completion.xml',
+  'household_task_2' =&gt; 'household_task_completion.xml',
+  'household_task_3' =&gt; 'household_task_completion.xml'
+}
+
+data.tasks_dir = 'https://cpee.org/hub/server/Teaching.dir/Prak.dir/TUM-Prak-26-SS.dir/GaoYuan.dir/tasks.dir/'</code>
+        <annotations>
+          <_logging_behavior>
+            <_exclude>false</_exclude>
+          </_logging_behavior>
+          <_context_data_analysis>
+            <probes/>
+          </_context_data_analysis>
+        </annotations>
+      </manipulate>
+      <parallel eid="e3" wait="-1" cancel="last">
+        <parallel_branch eid="e6">
+          <call id="a4" endpoint="worklist">
+            <parameters>
+              <label>Submit Household Task1</label>
+              <color/>
+              <arguments>
+                <orgmodel>https://lehre.bpm.in.tum.de/~ge36cid/organisation_household.xml</orgmodel>
+                <form>https://lehre.bpm.in.tum.de/~ge36cid/household-task-submission-form.html?v=1</form>
+                <role>amy</role>
+                <priority>1</priority>
+                <handling>single</handling>
+                <restrictions>
+                  <restrictions_item>
+                    <mode>force</mode>
+                    <id>amy</id>
+                  </restrictions_item>
+                </restrictions>
+                <data>
+                  <data>!data.task_submission_1</data>
+                </data>
+              </arguments>
+            </parameters>
+            <code>
+              <signal>false</signal>
+              <prepare/>
+              <finalize output="result">data.task_submission_1 = result</finalize>
+              <update output="result"/>
+              <rescue output="result"/>
+            </code>
+            <annotations>
+              <_generic/>
+              <_logging_behavior>
+                <_exclude>false</_exclude>
+                <_include>false</_include>
+              </_logging_behavior>
+              <_timing>
+                <_timing_weight/>
+                <_timing_avg/>
+                <explanations/>
+              </_timing>
+              <_shifting>
+                <_shifting_type>Duration</_shifting_type>
+              </_shifting>
+              <_context_data_analysis>
+                <probes/>
+                <ips/>
+              </_context_data_analysis>
+              <report>
+                <url/>
+              </report>
+              <_notes>
+                <_notes_general/>
+              </_notes>
+            </annotations>
+            <documentation>
+              <input/>
+              <output/>
+              <implementation>
+                <description/>
+              </implementation>
+              <code>
+                <description/>
+              </code>
+            </documentation>
+          </call>
+        </parallel_branch>
+        <parallel_branch eid="e4">
+          <call id="a6" endpoint="worklist">
+            <parameters>
+              <label>Submit Household Task2</label>
+              <color/>
+              <arguments>
+                <orgmodel>https://lehre.bpm.in.tum.de/~ge36cid/organisation_household.xml</orgmodel>
+                <form>https://lehre.bpm.in.tum.de/~ge36cid/household-task-submission-form.html?v=1</form>
+                <role>bob</role>
+                <priority>1</priority>
+                <handling>single</handling>
+                <restrictions>
+                  <restrictions_item>
+                    <mode>force</mode>
+                    <id>bob</id>
+                  </restrictions_item>
+                </restrictions>
+                <data>
+                  <data>!data.task_submission_2</data>
+                </data>
+              </arguments>
+            </parameters>
+            <code>
+              <signal>false</signal>
+              <prepare/>
+              <finalize output="result">data.task_submission_2 = result</finalize>
+              <update output="result"/>
+              <rescue output="result"/>
+            </code>
+            <annotations>
+              <_generic/>
+              <_logging_behavior>
+                <_exclude>false</_exclude>
+                <_include>false</_include>
+              </_logging_behavior>
+              <_timing>
+                <_timing_weight/>
+                <_timing_avg/>
+                <explanations/>
+              </_timing>
+              <_shifting>
+                <_shifting_type>Duration</_shifting_type>
+              </_shifting>
+              <_context_data_analysis>
+                <probes/>
+                <ips/>
+              </_context_data_analysis>
+              <report>
+                <url/>
+              </report>
+              <_notes>
+                <_notes_general/>
+              </_notes>
+            </annotations>
+            <documentation>
+              <input/>
+              <output/>
+              <implementation>
+                <description/>
+              </implementation>
+              <code>
+                <description/>
+              </code>
+            </documentation>
+          </call>
+        </parallel_branch>
+        <parallel_branch eid="e5">
+          <call id="a7" endpoint="worklist">
+            <parameters>
+              <label>Submit Household Task3</label>
+              <color/>
+              <arguments>
+                <orgmodel>https://lehre.bpm.in.tum.de/~ge36cid/organisation_household.xml</orgmodel>
+                <form>https://lehre.bpm.in.tum.de/~ge36cid/household-task-submission-form.html?v=1</form>
+                <role>charlie</role>
+                <priority>1</priority>
+                <handling>single</handling>
+                <restrictions>
+                  <restrictions_item>
+                    <mode>force</mode>
+                    <id>charlie</id>
+                  </restrictions_item>
+                </restrictions>
+                <data>
+                  <data>!data.task_submission_3</data>
+                </data>
+              </arguments>
+            </parameters>
+            <code>
+              <signal>false</signal>
+              <prepare/>
+              <finalize output="result">data.task_submission_3 = result</finalize>
+              <update output="result"/>
+              <rescue output="result"/>
+            </code>
+            <annotations>
+              <_generic/>
+              <_logging_behavior>
+                <_exclude>false</_exclude>
+                <_include>false</_include>
+              </_logging_behavior>
+              <_timing>
+                <_timing_weight/>
+                <_timing_avg/>
+                <explanations/>
+              </_timing>
+              <_shifting>
+                <_shifting_type>Duration</_shifting_type>
+              </_shifting>
+              <_context_data_analysis>
+                <probes/>
+                <ips/>
+              </_context_data_analysis>
+              <report>
+                <url/>
+              </report>
+              <_notes>
+                <_notes_general/>
+              </_notes>
+            </annotations>
+            <documentation>
+              <input/>
+              <output/>
+              <implementation>
+                <description/>
+              </implementation>
+              <code>
+                <description/>
+              </code>
+            </documentation>
+          </call>
+        </parallel_branch>
+      </parallel>
+      <manipulate id="a10" label="Build Tasks from Submissions">
+        <code>submissions = [
+  data.task_submission_1,
+  data.task_submission_2,
+  data.task_submission_3
+]
+
+data.tasks = []
+
+submissions.each_with_index do |submission, index|
+  submission = JSON.parse(submission) if submission.is_a?(String)
+
+  unless submission.is_a?(Hash)
+    raise "Invalid task submission #{index + 1}"
+  end
+
+  form_data = submission['data']
+  form_data = submission if !form_data.is_a?(Hash)
+
+  area = form_data['area'].to_s.strip
+  task = form_data['task'].to_s.strip
+  urgency = form_data['urgency'].to_s.strip
+
+  label = [task, area].reject(&amp;:empty?).join(' - ')
+  raise "Task label missing in submission #{index + 1}" if label.empty?
+
+  estimated_minutes =
+    case urgency.downcase
+    when 'urgent', 'high'
+      45
+    when 'next_week'
+      20
+    else
+      30
+    end
+
+  data.tasks &lt;&lt; {
+    'task_id' =&gt; "household_task_#{index + 1}",
+    'label' =&gt; label,
+    'estimated_minutes' =&gt; estimated_minutes
+  }
+end</code>
+        <annotations>
+          <_logging_behavior>
+            <_exclude>false</_exclude>
+          </_logging_behavior>
+          <_context_data_analysis>
+            <probes/>
+          </_context_data_analysis>
+        </annotations>
+      </manipulate>
+      <call id="a3" endpoint="ai_assign">
+        <parameters>
+          <label>AI Assign Tasks</label>
+          <color/>
+          <arguments>
+            <__H_Authorization>!"Bearer " + data.household_service_token</__H_Authorization>
+            <payload>!JSON.generate({ 'roommates' =&gt; data.roommates, 'tasks' =&gt; data.tasks, 'history' =&gt; data.history })</payload>
+          </arguments>
+        </parameters>
+        <code>
+          <signal>false</signal>
+          <prepare/>
+          <finalize output="result">payload = result
+payload = JSON.parse(payload) if payload.is_a?(String)
+
+unless payload.is_a?(Hash) &amp;&amp;
+       payload['assignments'].is_a?(Hash) &amp;&amp;
+       payload['estimates'].is_a?(Hash) &amp;&amp;
+       payload['workload_minutes'].is_a?(Hash)
+  raise 'Invalid AI assignment response'
+end
+
+data.assignments = payload['assignments']
+data.estimates = payload['estimates']
+data.workload_summary = payload['workload_minutes']
+data.assignment_reason = payload['reason'].to_s</finalize>
+          <update output="result"/>
+          <rescue output="result"/>
+        </code>
+        <annotations>
+          <_generic/>
+          <_logging_behavior>
+            <_exclude>false</_exclude>
+            <_include>false</_include>
+          </_logging_behavior>
+          <_timing>
+            <_timing_weight/>
+            <_timing_avg/>
+            <explanations/>
+          </_timing>
+          <_shifting>
+            <_shifting_type>Duration</_shifting_type>
+          </_shifting>
+          <_context_data_analysis>
+            <probes/>
+            <ips/>
+          </_context_data_analysis>
+          <report>
+            <url/>
+          </report>
+          <_notes>
+            <_notes_general/>
+          </_notes>
+        </annotations>
+        <documentation>
+          <input/>
+          <output/>
+          <implementation>
+            <description/>
+          </implementation>
+          <code>
+            <description/>
+          </code>
+        </documentation>
+      </call>
+      <parallel eid="e2" wait="-1" cancel="last">
+        <loop eid="e1" mode="pre_test" condition="data.assignments.length &gt; 0">
+          <_probability>
+            <_probability_min/>
+            <_probability_max/>
+            <_probability_avg/>
+          </_probability>
+          <_annotations>
+            <_generic/>
+            <_logging_behavior>
+              <_iteration>false</_iteration>
+            </_logging_behavior>
+          </_annotations>
+          <manipulate id="a2" label="Pick Next Assignment">
+            <code>data.assignment = data.assignments.first # [ "task1", "user"]
+data.current_task = data.tasks.find do |task|
+  task['task_id'] == data.assignment[0]
+end
+
+raise 'Task details missing' unless data.current_task
+
+data.assignments.delete(data.assignment[0])</code>
+            <annotations>
+              <_logging_behavior>
+                <_exclude>false</_exclude>
+              </_logging_behavior>
+              <_context_data_analysis>
+                <probes/>
+              </_context_data_analysis>
+            </annotations>
+          </manipulate>
+          <parallel_branch eid="e2">
+            <call id="a5" endpoint="subprocess">
+              <parameters>
+                <label>Start Assigned Task</label>
+                <color/>
+                <arguments>
+                  <behavior>wait_running</behavior>
+                  <url>!local.tasks_dir + local.task_models[local.assignment[0]]</url>
+                  <init>
+                    <task_id>!local.assignment[0]</task_id>
+                    <assigned_to>!local.assignment[1]</assigned_to>
+                    <task_label>!local.current_task['label']</task_label>
+                  </init>
+                  <endpoints/>
+                  <attributes/>
+                  <customization/>
+                </arguments>
+              </parameters>
+              <code>
+                <signal>false</signal>
+                <prepare/>
+                <finalize output="result">data.last_received_result = result
+
+
+payload = result
+payload = JSON.parse(payload) if payload.is_a?(String)
+
+unless payload.is_a?(Hash) &amp;&amp; payload['task_result'].is_a?(Hash)
+  raise 'Missing task_result in subprocess response'
+end
+
+data.results &lt;&lt; payload['task_result']</finalize>
+                <update output="result"/>
+                <rescue output="result"/>
+              </code>
+              <annotations>
+                <_generic/>
+                <_logging_behavior>
+                  <_exclude>false</_exclude>
+                  <_include>false</_include>
+                </_logging_behavior>
+                <_timing>
+                  <_timing_weight/>
+                  <_timing_avg/>
+                  <explanations/>
+                </_timing>
+                <_shifting>
+                  <_shifting_type>Duration</_shifting_type>
+                </_shifting>
+                <_context_data_analysis>
+                  <probes/>
+                  <ips/>
+                </_context_data_analysis>
+                <report>
+                  <url/>
+                </report>
+                <_notes>
+                  <_notes_general/>
+                </_notes>
+              </annotations>
+              <documentation>
+                <input/>
+                <output/>
+                <implementation>
+                  <description/>
+                </implementation>
+                <code>
+                  <description/>
+                </code>
+              </documentation>
+            </call>
+          </parallel_branch>
+        </loop>
+      </parallel>
+    </description>
+  </description>
+  <transformation>
+    <description type="copy"/>
+    <dataelements type="none"/>
+    <endpoints type="none"/>
+  </transformation>
+</testset>

@@ -1,0 +1,151 @@
+<testset xmlns="http://cpee.org/ns/properties/2.0">
+  <executionhandler>ruby</executionhandler>
+  <dataelements>
+    <cleaning_request>{}</cleaning_request>
+    <cleaning_result>{"user":"gaoyuan","raw":[{"name":"area","value":"kitchen"},{"name":"work_done","value":"oven"},{"name":"duration_minutes","value":"45"},{"name":"difficulty","value":"easy"},{"name":"completed_by","value":"gaoyuan"},{"name":"comment","value":""}],"data":{"area":"kitchen","work_done":"oven","duration_minutes":"45","difficulty":"easy","completed_by":"gaoyuan","comment":""}}</cleaning_result>
+    <cleaning_context>{}</cleaning_context>
+    <task_id>kitchen_cleaning_1</task_id>
+    <assigned_to>gaoyuan</assigned_to>
+    <result_message_id>household_1790445627_534650650_kitchen_cleaning_1</result_message_id>
+    <started_at>2026-09-26 20:00:29 +0200</started_at>
+    <task_result>{"task_id":"kitchen_cleaning_1","assigned_to":"gaoyuan","started_at":"2026-09-26 20:00:29 +0200","completed_at":"2026-09-26 20:02:28 +0200","result":{"user":"gaoyuan","raw":[{"name":"area","value":"kitchen"},{"name":"work_done","value":"oven"},{"name":"duration_minutes","value":"45"},{"name":"difficulty","value":"easy"},{"name":"completed_by","value":"gaoyuan"},{"name":"comment","value":""}],"data":{"area":"kitchen","work_done":"oven","duration_minutes":"45","difficulty":"easy","completed_by":"gaoyuan","comment":""}}}</task_result>
+    <task_label/>
+  </dataelements>
+  <documents/>
+  <endpoints>
+    <user>https-post://cpee.org/services/timeout-user.php</user>
+    <auto>https-post://cpee.org/services/timeout-auto.php</auto>
+    <subprocess>https-post://cpee.org/flow/start/url/</subprocess>
+    <timeout>https-post://cpee.org/services/timeout.php</timeout>
+    <send>https-post://cpee.org/ing/correlators/message/send/</send>
+    <receive>https-get://cpee.org/ing/correlators/message/receive/</receive>
+    <worklist>https-post://cpee.org/worklist/server/</worklist>
+  </endpoints>
+  <attributes>
+    <info>household_task_completion</info>
+    <creator>Christine Ashcreek</creator>
+    <author>Christine Ashcreek</author>
+    <modeltype>CPEE</modeltype>
+    <guarded>none</guarded>
+    <guarded_id/>
+    <model_uuid>75145593-5650-47e4-af1a-27e2e1dba1a8</model_uuid>
+    <model_version/>
+    <theme>extended</theme>
+    <design_dir>Teaching.dir/Prak.dir/TUM-Prak-26-SS.dir/GaoYuan.dir/tasks.dir/</design_dir>
+    <design_stage>development</design_stage>
+    <parent_instance>110870</parent_instance>
+    <parent_instance_uuid>f783e110-26b4-43a1-8b84-8ce917b93726</parent_instance_uuid>
+    <parent_instance_model>dynamic_household_worklist</parent_instance_model>
+    <parent_instance_task_id>a5</parent_instance_task_id>
+    <parent_instance_task_label>Start Assigned Task</parent_instance_task_label>
+  </attributes>
+  <description>
+    <description xmlns="http://cpee.org/ns/description/1.0">
+      <manipulate id="a1" label="Prepare Cleaning Request">
+        <code>data.cleaning_result = {}
+data.task_result = {}
+data.started_at = Time.now.to_s
+
+data.cleaning_request = {
+  'task_id' =&gt; data.task_id,
+  'task_label' =&gt; data.task_label,
+  'assigned_to' =&gt; data.assigned_to
+}</code>
+        <annotations>
+          <_logging_behavior>
+            <_exclude>false</_exclude>
+          </_logging_behavior>
+          <_context_data_analysis>
+            <probes/>
+          </_context_data_analysis>
+        </annotations>
+      </manipulate>
+      <call id="a2" endpoint="worklist">
+        <parameters>
+          <label>Complete Cleaning Task</label>
+          <color/>
+          <arguments>
+            <orgmodel>https://lehre.bpm.in.tum.de/~ge36cid/organisation_household.xml</orgmodel>
+            <form>https://lehre.bpm.in.tum.de/~ge36cid/cleaning-completion-form.html?v=6</form>
+            <role>!data.assigned_to</role>
+            <priority>1</priority>
+            <handling>single</handling>
+            <restrictions>
+              <restrictions_item>
+                <mode>force</mode>
+                <id>!data.assigned_to</id>
+              </restrictions_item>
+            </restrictions>
+            <data>
+              <data>!data.cleaning_request</data>
+            </data>
+          </arguments>
+        </parameters>
+        <code>
+          <signal>false</signal>
+          <prepare/>
+          <finalize output="result">data.cleaning_result = result</finalize>
+          <update output="result"/>
+          <rescue output="result"/>
+        </code>
+        <annotations>
+          <_generic/>
+          <_logging_behavior>
+            <_exclude>false</_exclude>
+            <_include>false</_include>
+          </_logging_behavior>
+          <_timing>
+            <_timing_weight/>
+            <_timing_avg/>
+            <explanations/>
+          </_timing>
+          <_shifting>
+            <_shifting_type>Duration</_shifting_type>
+          </_shifting>
+          <_context_data_analysis>
+            <probes/>
+            <ips/>
+          </_context_data_analysis>
+          <report>
+            <url/>
+          </report>
+          <_notes>
+            <_notes_general/>
+          </_notes>
+        </annotations>
+        <documentation>
+          <input/>
+          <output/>
+          <implementation>
+            <description/>
+          </implementation>
+          <code>
+            <description/>
+          </code>
+        </documentation>
+      </call>
+      <manipulate id="a3" label="Build Cleaning Result">
+        <code>data.task_result = {
+'task_id' =&gt; data.task_id,
+'assigned_to' =&gt; data.assigned_to,
+'started_at' =&gt; data.started_at,
+'completed_at' =&gt; Time.now.to_s,
+'result' =&gt; data.cleaning_result
+}</code>
+        <annotations>
+          <_logging_behavior>
+            <_exclude>false</_exclude>
+          </_logging_behavior>
+          <_context_data_analysis>
+            <probes/>
+          </_context_data_analysis>
+        </annotations>
+      </manipulate>
+    </description>
+  </description>
+  <transformation>
+    <description type="copy"/>
+    <dataelements type="none"/>
+    <endpoints type="none"/>
+  </transformation>
+</testset>
